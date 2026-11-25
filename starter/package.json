@@ -1,0 +1,26 @@
+{
+  "name": "switchboard-starter",
+  "private": true,
+  "description": "Starter for the Switchboard build round. The harness is given; the product is yours.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "up": "docker compose up -d && node harness/doctor.js --wait",
+    "up:search": "docker compose --profile search up -d && node harness/doctor.js --wait",
+    "down": "docker compose --profile search down",
+    "mocks": "node harness/run-mocks.js",
+    "doctor": "node harness/doctor.js",
+    "check": "node harness/check.js",
+    "check:full": "node harness/check.js --full",
+    "chaos": "node harness/pigeon.js chaos",
+    "report": "node harness/pigeon.js report",
+    "inbound": "node harness/pigeon.js inbound",
+    "quiet": "node harness/pigeon.js quiet",
+    "drizzle": "node harness/pigeon.js drizzle",
+    "scaffold:install": "npm --prefix scaffold/server install && npm --prefix scaffold/web install",
+    "scaffold:server": "npm --prefix scaffold/server run dev",
+    "scaffold:web": "npm --prefix scaffold/web run dev",
+    "start:server": "npm --prefix scaffold/server start"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  // Fallback for machines where Docker will not run: open this repository in
+  // GitHub Codespaces (or any Dev Containers host) and everything is inside it.
+  "name": "switchboard",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "features": { "ghcr.io/devcontainers/features/docker-in-docker:2": {} },
+  "forwardPorts": [4000, 5173, 4010, 4020, 4030],
+  "postCreateCommand": "docker compose pull --quiet mongo redis pigeon",
+  "postStartCommand": "docker compose up -d"
+}
