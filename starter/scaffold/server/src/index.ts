@@ -2,6 +2,11 @@ import {
   startWebhookWorker,
   stopWebhookWorker,
 } from "./workers/webhookWorker.js";
+import outboundRouter from "./routes/outbound.js";
+import {
+  startOutboundWorker,
+  stopOutboundWorker,
+} from "./workers/outbound.worker.js";
 import pigeonWebhookRouter from "./routes/pigeonWebhook.js";
 import express from "express";
 import { createServer } from "node:http";
@@ -17,6 +22,8 @@ app.use(
 
 app.use(express.json());
 
+app.use(outboundRouter);
+
 // Health check
 app.get("/healthz", (_req, res) => {
   res.json({ ok: true });
@@ -30,6 +37,8 @@ async function startServer(): Promise<void> {
     // Connect to MongoDB and initialize indexes/workspaces
     await getDb();
     startWebhookWorker();
+
+    startOutboundWorker();
     server.listen(config.port, () => {
       console.log(`server on http://localhost:${config.port}`);
       console.log("MongoDB connection ready");
@@ -44,7 +53,7 @@ async function startServer(): Promise<void> {
 // Graceful shutdown
 async function shutdown(signal: string): Promise<void> {
   console.log(`${signal} received. Shutting down...`);
-
+  stopWebhookWorker();
   server.close(async (error) => {
     if (error) {
       console.error("HTTP server shutdown error:", error);
